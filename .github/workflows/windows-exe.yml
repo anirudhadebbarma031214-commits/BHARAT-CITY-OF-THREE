@@ -1,0 +1,55 @@
+name: Windows EXE Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "**.gd"
+      - "**.tscn"
+      - "**.tres"
+      - "project.godot"
+      - "export_presets.cfg"
+      - ".github/workflows/windows-exe.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  export-windows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Godot 4.4.1
+        run: |
+          wget -q https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip -O godot.zip
+          unzip -q godot.zip -d godot-bin
+          chmod +x godot-bin/Godot_v4.4.1-stable_linux.x86_64
+          echo "$PWD/godot-bin" >> "$GITHUB_PATH"
+          mv godot-bin/Godot_v4.4.1-stable_linux.x86_64 godot-bin/godot
+
+      - name: Install Windows export templates
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.4.1.stable"
+          wget -q https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz -O templates.tpz
+          mkdir templates-unpacked
+          unzip -q templates.tpz -d templates-unpacked
+          cp -a templates-unpacked/templates/. "$HOME/.local/share/godot/export_templates/4.4.1.stable/"
+
+      - name: Import project assets
+        run: godot --headless --editor --path . --quit
+
+      - name: Export Windows executable
+        run: |
+          mkdir -p build
+          godot --headless --path . --export-release "Windows Desktop" build/BHARAT-CITY-OF-THREE.exe
+
+      - name: Upload Windows EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: BHARAT-CITY-OF-THREE-Windows
+          path: build/BHARAT-CITY-OF-THREE.exe
+          if-no-files-found: error
+          retention-days: 14
