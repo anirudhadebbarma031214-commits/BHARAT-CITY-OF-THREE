@@ -9,7 +9,7 @@ class_name BharatVehicle
 var driver_active := false
 var current_speed := 0.0
 var player_ref: Node3D
-var wanted_system: Node
+var wanted_system: WantedSystem
 var horn_time := 0.0
 var last_collision_speed := 0.0
 
@@ -99,7 +99,7 @@ func _physics_process(delta: float) -> void:
 		horn_time = 1.0
 		print("HONK! Indian city traffic horn")
 
-func enter_vehicle(player: Node3D, wanted: Node) -> void:
+func enter_vehicle(player: Node3D, wanted: WantedSystem) -> void:
 	driver_active = true
 	player_ref = player
 	wanted_system = wanted
