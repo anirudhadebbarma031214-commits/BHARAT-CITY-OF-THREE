@@ -12,9 +12,9 @@ func _process(_delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	var size := minf(size.x, size.y)
-	var center := Vector2(size * 0.5, size * 0.5)
-	var radius := size * 0.46
+	var map_size := minf(size.x, size.y)
+	var center := Vector2(map_size * 0.5, map_size * 0.5)
+	var radius := map_size * 0.46
 	draw_circle(center, radius + 5.0, Color(0.02, 0.04, 0.05, 0.85))
 	draw_circle(center, radius, Color(0.12, 0.2, 0.18, 0.98))
 	# Schematic local street grid, not a live GPS map.
