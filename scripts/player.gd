@@ -13,7 +13,7 @@ var look_pitch := -0.16
 
 func _ready() -> void:
 	_make_character()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Keep the cursor visible for the intro menu.
 
 func _make_character() -> void:
 	var capsule_mesh := MeshInstance3D.new()
@@ -49,8 +49,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera_pivot.rotate_y(-event.relative.x * mouse_sensitivity)
 		look_pitch = clampf(look_pitch - event.relative.y * mouse_sensitivity, -0.75, 0.45)
 		camera_pivot.rotation.x = look_pitch
-	if event.is_action_pressed("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
