@@ -168,7 +168,7 @@ func _build_vehicles() -> void:
 	for i in range(4):
 		var vehicle: BharatVehicle = VehicleScript.new()
 		vehicle.name = "Parked Car %d" % (i + 1)
-		vehicle.position = Vector3(3.0 if i % 2 == 0 else -3.0, 0.75, -float(i) * 25.0 - 1.0)
+		vehicle.position = Vector3(3.0 if i % 2 == 0 else -3.0, 0.0, -float(i) * 25.0 - 1.0)
 		vehicle.rotation.y = PI if i % 2 == 0 else 0.0
 		vehicle.max_speed = 26.0 + float(i) * 1.5
 		add_child(vehicle)
